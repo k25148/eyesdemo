@@ -45,7 +45,9 @@
         src="demotopass.mp4"
         preload="auto"
         loop
+        autoplay
         playsinline
+        webkit-playsinline
         muted>
       </video>
 
@@ -58,11 +60,12 @@
 
     <a-entity mindar-image-target="targetIndex: 0">
 
+      <!-- 動画：画像の中央上部、元サイズの40% -->
       <a-video
         src="#demoVideo"
-        width="1.77"
-        height="1"
-        position="0 0 0">
+        width="0.708"
+        height="0.4"
+        position="0 0.30 0">
       </a-video>
 
     </a-entity>
@@ -73,7 +76,20 @@
 
     const video = document.querySelector("#demoVideo");
 
-    video.play();
+    // 読み込み後、自動再生
+    video.addEventListener("loadeddata", () => {
+      video.play().catch(error => {
+        console.log("Autoplay failed:", error);
+      });
+    });
+
+    // MindARのターゲット認識後にも再生を試みる
+    document.querySelector('[mindar-image-target]')
+      .addEventListener("targetFound", () => {
+        video.play().catch(error => {
+          console.log("Video play failed:", error);
+        });
+      });
 
   </script>
 
